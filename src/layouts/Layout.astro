@@ -10,10 +10,10 @@ import serifFont from '@fontsource/newsreader/files/newsreader-latin-400-normal.
 import italicFont from '@fontsource/newsreader/files/newsreader-latin-400-italic.woff2?url';
 interface Props { title?: string; description?: string; notFound?: boolean; }
 const { title = copy.title, description = copy.description, notFound = false } = Astro.props;
-const legalLinks = [['Contact', settings.CONTACT_URL], ['Privacy', settings.PRIVACY_URL], ['Terms', settings.TERMS_URL]].filter(([, url]) => url);
+const legalLinks = [['聯絡我們', settings.CONTACT_URL], ['私隱政策', settings.PRIVACY_URL], ['使用條款', settings.TERMS_URL]].filter(([, url]) => url);
 ---
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-HK">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,7 +24,7 @@ const legalLinks = [['Contact', settings.CONTACT_URL], ['Privacy', settings.PRIV
     <title>{title}</title>
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Bookkin" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content="zh_HK" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={notFound ? site.absolute('404.html') : site.siteUrl} />
@@ -41,25 +41,25 @@ const legalLinks = [['Contact', settings.CONTACT_URL], ['Privacy', settings.PRIV
     <link rel="sitemap" href={site.absolute('sitemap-index.xml')} />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">跳至主要內容</a>
     <header class="site-header">
       <div class="nav-wrap">
-        <a class="brand" href={site.base} aria-label="Bookkin home"><img src={site.asset('bookkin-icon.png')} width="34" height="34" alt="" /><span>Bookkin<span class="brand-dot">.</span></span></a>
-        <div class="navigation-cluster"><nav aria-label="Main navigation">
-          <a class="nav-secondary" data-nav-section="features" href={`${site.base}#features`}>Features</a>
-          <a class="nav-secondary" data-nav-section="how-it-works" href={`${site.base}#how-it-works`}>How it works</a>
-          <a class="nav-download" data-nav-section="download" href={`${site.base}#download`}>Download <Icon name="down" size={17} /></a>
+        <a class="brand" href={site.base} aria-label="閱見首頁"><img src={site.asset('bookkin-icon.png')} width="34" height="34" alt="" /><span>Bookkin<span class="brand-dot">.</span></span></a>
+        <div class="navigation-cluster"><nav aria-label="主選單">
+          <a class="nav-secondary" data-nav-section="features" href={`${site.base}#features`}>功能介紹</a>
+          <a class="nav-secondary" data-nav-section="how-it-works" href={`${site.base}#how-it-works`}>開始使用</a>
+          <a class="nav-download" data-nav-section="download" href={`${site.base}#download`}>下載 <Icon name="down" size={17} /></a>
         </nav>
-        <details class="mobile-menu"><summary aria-label="Site menu"><span class="menu-glyph" aria-hidden="true"><span></span><span></span></span></summary><nav aria-label="Mobile navigation"><a href={`${site.base}#features`}>Features <Icon name="arrow" size={18} /></a><a href={`${site.base}#how-it-works`}>How it works <Icon name="arrow" size={18} /></a><a href={`${site.base}#faq`}>A few questions <Icon name="arrow" size={18} /></a></nav></details>
+        <details class="mobile-menu"><summary aria-label="網站選單"><span class="menu-glyph" aria-hidden="true"><span></span><span></span></span></summary><nav aria-label="手機版選單"><a href={`${site.base}#features`}>功能介紹 <Icon name="arrow" size={18} /></a><a href={`${site.base}#how-it-works`}>開始使用 <Icon name="arrow" size={18} /></a><a href={`${site.base}#faq`}>常見問題 <Icon name="arrow" size={18} /></a></nav></details>
         </div>
       </div>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
     <footer class="site-footer wrap">
       <p>© {new Date().getUTCFullYear()} Bookkin</p>
-      <nav aria-label="Footer navigation">
+      <nav aria-label="頁尾選單">
         {legalLinks.map(([label, url]) => <a href={url}>{label}</a>)}
-        <a href="#main">Back to top ↑</a>
+        <a href="#main">返回頂部 ↑</a>
       </nav>
     </footer>
   </body>

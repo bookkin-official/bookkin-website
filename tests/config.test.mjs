@@ -53,7 +53,7 @@ test('an APK cannot be published without release confirmation and version', () =
   }
   const confirmed = { ...input, ANDROID_APK_RELEASE_VERIFIED:true, ANDROID_APK_VERSION:' 1.0.0 ' };
   assert.equal(resolveDownloads(confirmed).android.kind, 'apk');
-  assert.equal(resolveDownloads(confirmed).android.note, 'Version 1.0.0 · Direct download');
+  assert.equal(resolveDownloads(confirmed).android.note, '版本 1.0.0 · 直接下載');
   assert.equal(resolveDownloads({...confirmed, GOOGLE_PLAY_URL:'https://play.google.com/store/apps/details?id=example.app'}).android.kind, 'store');
 });
 test('download URLs cannot carry unsafe schemes or credentials', () => {

@@ -9,7 +9,7 @@ const html = await readFile('dist/index.html','utf8');
 assert.ok(html.includes(`rel="canonical" href="${site.siteUrl}"`), 'canonical is the deployed page URL');
 assert.ok(html.includes(`content="${site.absolute('og.png')}"`), 'absolute OG image');
 assert.ok(html.includes('id="download"'), 'download anchor exists');
-assert.ok(html.includes('lang="en"'), 'English page language');
+assert.ok(html.includes('lang="zh-Hant-HK"'), 'Traditional Chinese page language');
 assert.ok(!html.includes('href=""') && !html.includes('href="#"'), 'no empty links');
 assert.ok(!/coming soon|not available to download yet|still on their way/i.test(html), 'no prelaunch placeholder copy');
 const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]));
@@ -53,9 +53,9 @@ assert.equal(qr?.data,site.downloadUrl,'QR decodes to the current deployed downl
 for (const [name,option] of Object.entries(downloads)) {
   const platform = name === 'ios' ? 'iOS' : 'Android';
   assert.ok(html.includes(`data-platform="${platform}"`), `${platform} download component is present`);
-  if(!option.url) assert.ok(new RegExp(`<button[^>]*disabled[^>]*aria-label="Download for ${platform}"`).test(html), `${platform} button cannot navigate until its URL is configured`);
+  if(!option.url) assert.ok(new RegExp(`<button[^>]*disabled[^>]*aria-label="下載 ${platform} 版"`).test(html), `${platform} button cannot navigate until its URL is configured`);
 }
 for (const key of ['CONTACT_URL','PRIVACY_URL','TERMS_URL']) {
-  if(!settings[key]) assert.ok(!html.includes(`>${{CONTACT_URL:'Contact',PRIVACY_URL:'Privacy',TERMS_URL:'Terms'}[key]}</a>`),`no invented ${key}`);
+  if(!settings[key]) assert.ok(!html.includes(`>${{CONTACT_URL:'聯絡我們',PRIVACY_URL:'私隱政策',TERMS_URL:'使用條款'}[key]}</a>`),`no invented ${key}`);
 }
 console.log(`Verified ${localPaths.size} page assets, fonts, anchors, metadata, sitemap and QR for ${site.siteUrl}`);

@@ -1,33 +1,33 @@
-// Public-facing English copy. Product capabilities must stay grounded in Bookkin.
+// Public-facing Traditional Chinese copy. Product capabilities must stay grounded in Bookkin.
 export const copy = {
-  title: 'Bookkin — Your books. Your kind of people.',
-  description: 'A quiet social library. Build your bookshelf, discover your next read, and connect through the books you love.',
+  title: '《閱見》',
+  description: '一個靜靜讀書、以書會友的地方。建立自己的書架，發掘下一本想讀的書，認識同樣愛書的人。',
   hero: {
-    eyebrow: 'A quiet social library',
-    description: 'Build your bookshelf, find your next read, and meet people through the books you love.',
+    eyebrow: '靜靜讀書',
+    description: '建立自己的書架，發掘下一本想讀的書，從喜歡的書認識同樣愛讀書的人。',
   },
   features: [
     {
-      title: 'Find a shared\nfavourite.',
-      text: 'Explore other readers’ shelves and follow the people who make you want to read more.',
+      title: '找讀書同好',
+      text: '逛逛其他讀者的書架，追蹤那些讓你也想翻開一本書的人。',
     },
     {
-      title: 'A shelf of\nyour own.',
-      text: 'Scan or add your books, arrange them into collections, and keep your favourites close.',
+      title: '整理你的書架',
+      text: '掃描或手動加入書籍，按主題建立收藏，把喜歡的書放在手邊。',
     },
     {
-      title: 'Share your\nreading life.',
-      text: 'Share photos and reading moments, save a post for later, or join the conversation.',
+      title: '分享閱讀日常',
+      text: '分享照片與閱讀片段，收藏想留待日後細讀的貼文，也可以留言交流。',
     },
   ],
   steps: [
-    { title: 'Create your account.', text: 'Sign up with Google or email.' },
-    { title: 'Add your books.', text: 'Scan or enter the details, then review and save.' },
-    { title: 'Explore.', text: 'Browse readers’ shelves and follow a shared interest.' },
+    { title: '建立帳戶', text: '使用 Google 帳戶或電郵註冊。' },
+    { title: '把書加入書架', text: '掃描或手動輸入書籍資料，確認後儲存。' },
+    { title: '探索讀者社群', text: '逛逛其他讀者的書架，追蹤興趣相投的讀者。' },
   ],
   faqs: [
-    { question: 'Where can I use Bookkin?', answer: 'Bookkin also works in your browser. Sign in at www.bookkin.net to use your bookshelf and explore the community.', platformStatus: true },
-    { question: 'How do I start my bookshelf?', answer: 'Create an account with Google or email, then add books from your profile. You can enter book details yourself or use the scanner. Scanned results are yours to review and edit before you add them.' },
-    { question: 'What can other readers see?', answer: 'Books you confirm and posts you publish are visible to signed-in readers you have not blocked. Adding books also creates a post about those additions.' },
+    { question: '在哪裏可以使用閱見？', answer: '你也可以在瀏覽器使用閱見。登入 www.bookkin.net，即可使用書架和探索讀者社群。', platformStatus: true },
+    { question: '怎樣建立自己的書架？', answer: '使用 Google 帳戶或電郵註冊後，即可從個人檔案加入書籍。你可以手動輸入資料，也可以掃描書籍，並在加入前確認或修改掃描結果。' },
+    { question: '其他讀者可以看到甚麼？', answer: '已登入且未被你封鎖的讀者，可以看到你已確認加入的書籍和已發佈的貼文。加入書籍時，系統也會建立一則相關貼文。' },
   ],
 };

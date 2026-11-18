@@ -10,70 +10,70 @@ import people from '../assets/app-people.png';
 import home from '../assets/app-home.png';
 const anyDownload = !!(downloads.ios.url || downloads.android.url);
 const previewImages = [people, profile, home];
-const screenNames = ['Your people', 'Your bookshelf', 'Your community'];
-const tabNames = ['People', 'Bookshelf', 'Community'];
-const previewAlts = ['Bookkin People showing readers and their favourite books, using sample content.', 'Bookkin Profile with a personal bookshelf, favourite books and collections, using sample content.', 'Bookkin Home with a community post about books, using sample content.'];
+const screenNames = ['讀書同好', '我的書架', '讀者社群'];
+const tabNames = ['同好', '書架', '社群'];
+const previewAlts = ['閱見的同好頁面，展示讀者及他們喜歡的書籍（示範內容）。', '閱見的個人檔案，展示個人書架、喜愛的書籍及收藏（示範內容）。', '閱見的首頁，展示一則關於書籍的社群貼文（示範內容）。'];
 const fullImages = await Promise.all(previewImages.map(src => getImage({ src, width: 780, format: 'webp', quality: 90 })));
 const platformAnswer = [
   copy.faqs[0].answer,
-  downloads.ios.kind === 'beta' ? 'An iOS beta is available through TestFlight.' : downloads.ios.url ? 'Download the iOS app from the App Store.' : '',
-  downloads.android.kind === 'apk' ? 'A signed Android release is available as a direct APK download.' : downloads.android.url ? 'Download the Android app from Google Play.' : '',
-].filter(Boolean).join(' ');
+  downloads.ios.kind === 'beta' ? 'iOS 測試版可透過 TestFlight 安裝。' : downloads.ios.url ? '可在 App Store 下載 iOS 版。' : '',
+  downloads.android.kind === 'apk' ? '可直接下載已簽署的 Android APK。' : downloads.android.url ? '可在 Google Play 下載 Android 版。' : '',
+].filter(Boolean).join('');
 ---
 <Layout>
   <section class="hero wrap" aria-labelledby="hero-heading">
     <div class="hero-copy" data-enter>
       <p class="eyebrow">{copy.hero.eyebrow}</p>
-      <h1 id="hero-heading">Your books.<br /><em>Your kind</em><br />of people.</h1>
+      <h1 id="hero-heading">《閱見》</h1>
       <p class="hero-description">{copy.hero.description}</p>
       <div class="hero-actions">
-        <a class="button" href="#download">Get Bookkin<Icon name="arrow" /></a>
+        <a class="button" href="#download">下載閱見<Icon name="arrow" /></a>
       </div>
     </div>
     <figure class="hero-visual" data-enter>
-      <a class="hero-stage" href={fullImages[1].src} data-preview data-preview-title="Your bookshelf" aria-label="View the full Bookkin bookshelf screenshot">
+      <a class="hero-stage" href={fullImages[1].src} data-preview data-preview-title="我的書架" aria-label="查看完整的閱見書架畫面">
         <div class="phone hero-phone"><Image src={profile} alt={previewAlts[1]} widths={[390, 780]} sizes="(max-width: 760px) 278px, 260px" width={390} format="webp" quality={90} loading="eager" fetchpriority="high" /></div>
-        <span class="screen-hint"><Icon name="expand" size={16} />View screen</span>
+        <span class="screen-hint"><Icon name="expand" size={16} />查看畫面</span>
       </a>
-      <figcaption><span class="mobile-crop-note">Bookshelf detail. </span>Actual interface, sample content.<span class="compact-preview-hint"> Tap to explore the screens.</span></figcaption>
+      <figcaption><span class="mobile-crop-note">書架局部畫面。</span>實際介面，內容為示範。<span class="compact-preview-hint">點按查看完整畫面。</span></figcaption>
     </figure>
   </section>
 
   <section id="features" class="features wrap" aria-labelledby="features-heading">
-    <div class="section-heading" data-reveal><h2 id="features-heading">Inside Bookkin.</h2></div>
+    <div class="section-heading" data-reveal><h2 id="features-heading">探索閱見</h2></div>
     <div class="product-tour" data-tour>
-      <div class="tour-tabs" data-tour-controls hidden aria-label="Explore Bookkin">
+      <div class="tour-tabs" data-tour-controls hidden aria-label="探索閱見">
         {tabNames.map((name,index)=><button type="button" data-tour-tab data-index={index} id={`tour-tab-${index}`} aria-label={name} aria-controls={`tour-panel-${index}`}>{name}</button>)}
       </div>
       {copy.features.map((feature,index)=>(
         <article class:list={['tour-panel',`tour-panel-${index+1}`]} id={`tour-panel-${index}`} data-tour-panel>
           <div class="feature-copy"><h3>{feature.title.split('\n').map((line,i)=><>{i>0&&<br />}{line}</>)}</h3><p class="feature-description">{feature.text}</p></div>
-          <figure class="feature-visual"><a class="feature-stage" href={fullImages[index].src} data-preview data-preview-title={screenNames[index]} aria-label={`View the full Bookkin ${['people','bookshelf','community'][index]} screenshot`}><div class="phone feature-phone"><Image src={previewImages[index]} alt={previewAlts[index]} widths={[390,780]} sizes="(max-width: 760px) 240px, 250px" width={390} format="webp" quality={90} loading="lazy" /></div><span class="screen-hint"><Icon name="expand" size={16} />View screen</span></a><figcaption>Actual interface · sample content.<span class="compact-preview-hint"> Tap to explore the screens.</span></figcaption></figure>
+          <figure class="feature-visual"><a class="feature-stage" href={fullImages[index].src} data-preview data-preview-title={screenNames[index]} aria-label={`查看完整畫面：${screenNames[index]}`}><div class="phone feature-phone"><Image src={previewImages[index]} alt={previewAlts[index]} widths={[390,780]} sizes="(max-width: 760px) 240px, 250px" width={390} format="webp" quality={90} loading="lazy" /></div><span class="screen-hint"><Icon name="expand" size={16} />查看畫面</span></a><figcaption>實際介面，內容為示範。<span class="compact-preview-hint">點按查看完整畫面。</span></figcaption></figure>
         </article>
       ))}
     </div>
   </section>
 
   <section id="how-it-works" class="how-section" aria-labelledby="how-heading"><div class="wrap">
-    <div class="section-heading" data-reveal><h2 id="how-heading">Make yourself at home.</h2></div>
-    <ol class="steps" data-reveal>{copy.steps.map((step,index)=><li><span class="step-number" aria-hidden="true">0{index+1}</span><div><h3>{anyDownload&&index===0?'Get Bookkin.':step.title}</h3><p>{anyDownload&&index===0?'Download Bookkin and sign up with Google or email.':step.text}</p></div></li>)}</ol>
+    <div class="section-heading" data-reveal><h2 id="how-heading">開始使用</h2></div>
+    <ol class="steps" data-reveal>{copy.steps.map((step,index)=><li><span class="step-number" aria-hidden="true">0{index+1}</span><div><h3>{anyDownload&&index===0?'下載閱見':step.title}</h3><p>{anyDownload&&index===0?'下載閱見後，使用 Google 帳戶或電郵註冊。':step.text}</p></div></li>)}</ol>
   </div></section>
 
   <section id="download" class="download-section" aria-labelledby="download-heading"><div class="download-panel wrap">
-    <div class="download-copy"><h2 id="download-heading">Get Bookkin.</h2>
+    <div class="download-copy"><h2 id="download-heading">下載閱見</h2>
       <div class="platforms"><DownloadOption platform="iOS" option={downloads.ios} /><DownloadOption platform="Android" option={downloads.android} /></div>
-      {settings.WEB_APP_URL&&<div class="web-option"><a class="text-link" href={settings.WEB_APP_URL}>Open Bookkin on the web <span aria-hidden="true">↗</span></a></div>}
+      {settings.WEB_APP_URL&&<div class="web-option"><a class="text-link" href={settings.WEB_APP_URL}>開啟閱見網頁版 <span aria-hidden="true">↗</span></a></div>}
     </div>
-    <aside class="qr-panel" aria-label="Open this page on your phone"><div class="qr-art"><img src={site.asset('download-qr.png')} alt="QR code linking to this website’s download section." width="180" height="180" loading="lazy" /></div><p>Scan to open on your phone.</p></aside>
+    <aside class="qr-panel" aria-label="在手機上開啟此頁"><div class="qr-art"><img src={site.asset('download-qr.png')} alt="連往此網站下載區的二維碼。" width="180" height="180" loading="lazy" /></div><p>掃描二維碼，在手機上開啟此頁。</p></aside>
   </div></section>
 
-  <section id="faq" class="faq-section wrap" aria-labelledby="faq-heading"><div class="faq-intro" data-reveal><h2 id="faq-heading">A few questions.</h2></div><div class="faq-list">{copy.faqs.map(faq=><details><summary>{faq.question}<span class="faq-plus"><Icon name="plus" size={20} /></span></summary><div class="faq-answer"><p>{faq.platformStatus?platformAnswer:faq.answer}</p></div></details>)}</div></section>
+  <section id="faq" class="faq-section wrap" aria-labelledby="faq-heading"><div class="faq-intro" data-reveal><h2 id="faq-heading">常見問題</h2></div><div class="faq-list">{copy.faqs.map(faq=><details><summary>{faq.question}<span class="faq-plus"><Icon name="plus" size={20} /></span></summary><div class="faq-answer"><p>{faq.platformStatus?platformAnswer:faq.answer}</p></div></details>)}</div></section>
 
   <dialog id="screen-preview" class="screen-dialog" aria-labelledby="screen-preview-heading">
-    <div class="dialog-heading"><div><span class="preview-count" data-preview-count aria-hidden="true">01 / 03</span><h2 id="screen-preview-heading" data-preview-heading>Inside Bookkin</h2></div><button type="button" data-preview-close aria-label="Close screenshot"><Icon name="close" size={22} /></button></div>
-    <nav class="preview-tabs" aria-label="Choose a Bookkin screen">{tabNames.map((name,index)=><button type="button" data-preview-select data-index={index} aria-pressed={index===0?'true':'false'}>{name}</button>)}</nav>
+    <div class="dialog-heading"><div><span class="preview-count" data-preview-count aria-hidden="true">01 / 03</span><h2 id="screen-preview-heading" data-preview-heading>探索閱見</h2></div><button type="button" data-preview-close aria-label="關閉預覽"><Icon name="close" size={22} /></button></div>
+    <nav class="preview-tabs" aria-label="選擇要預覽的閱見畫面">{tabNames.map((name,index)=><button type="button" data-preview-select data-index={index} aria-pressed={index===0?'true':'false'}>{name}</button>)}</nav>
     <div class="preview-frame" data-preview-frame><img data-preview-image width="780" height="1800" alt="" /></div>
-    <div class="preview-footer"><p>Actual interface · sample content</p><a href={fullImages[0].src} data-preview-original target="_blank" rel="noopener">Full-size image <Icon name="expand" size={15} /></a></div>
+    <div class="preview-footer"><p>實際介面，內容為示範</p><a href={fullImages[0].src} data-preview-original target="_blank" rel="noopener">查看原圖 <Icon name="expand" size={15} /></a></div>
     <p class="sr-only" role="status" data-preview-status></p>
   </dialog>
 </Layout>

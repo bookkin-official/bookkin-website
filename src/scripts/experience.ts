@@ -73,7 +73,7 @@ function setupTour(root: HTMLElement) {
     matchedPanels[index].tabIndex = 0;
   });
   controls.setAttribute('role', 'tablist');
-  if (!controls.hasAttribute('aria-label')) controls.setAttribute('aria-label', 'Explore Bookkin');
+  if (!controls.hasAttribute('aria-label')) controls.setAttribute('aria-label', '探索閱見');
   select(0, false, false);
   root.dataset.enhanced = 'true';
   controls.hidden = false;
@@ -97,8 +97,8 @@ function setupPreview() {
     if (!link || sources.some(source => source.url === link.href)) return;
     const url = new URL(link.href, window.location.href);
     if (!['https:', 'http:'].includes(url.protocol)) return;
-    const title = link.dataset.previewTitle || 'Bookkin app preview';
-    sources.push({ url: url.href, title, alt: panel.querySelector('a[data-preview] img')?.getAttribute('alt') || `${title} — actual Bookkin interface with sample content.` });
+    const title = link.dataset.previewTitle || '閱見畫面預覽';
+    sources.push({ url: url.href, title, alt: panel.querySelector('a[data-preview] img')?.getAttribute('alt') || `${title}，實際介面，內容為示範。` });
   });
   let opener: HTMLAnchorElement | null = null;
   let loadingAnchor: HTMLAnchorElement | null = null;
@@ -135,7 +135,7 @@ function setupPreview() {
   function updateOriginal(source: Screen) {
     if (!originalLink) return;
     originalLink.href = source.url;
-    originalLink.setAttribute('aria-label', `Open the full-size image: ${source.title} (opens in a new tab)`);
+    originalLink.setAttribute('aria-label', `查看原圖：${source.title}（在新分頁開啟）`);
   }
 
   const showScreen = (source: Screen, index: number) => {
@@ -159,18 +159,18 @@ function setupPreview() {
     requestedIndex = index;
     frame.classList.add('is-loading');
     frame.setAttribute('aria-busy', 'true');
-    if (status) status.textContent = `Loading ${source.title.toLowerCase()}…`;
+    if (status) status.textContent = `正在載入「${source.title}」…`;
     try {
       await loadScreen(source);
       if (currentRequest !== request || !dialog.open) return;
       showScreen(source, index);
-      if (status) status.textContent = `${source.title}. Screen ${index + 1} of ${sources.length}.`;
+      if (status) status.textContent = `${source.title}，第 ${index + 1} 張，共 ${sources.length} 張。`;
       animateIn(image, 220, 5);
     } catch {
       if (currentRequest !== request || !dialog.open) return;
       requestedIndex = activeIndex;
       updateOriginal(source);
-      if (status) status.textContent = `Couldn’t load ${source.title.toLowerCase()}. Open the full-size image to try again.`;
+      if (status) status.textContent = `無法載入「${source.title}」。請開啟原圖重試。`;
     } finally {
       if (currentRequest === request) clearLoading();
     }
@@ -223,8 +223,8 @@ function setupPreview() {
       anchor.classList.add('is-loading');
       anchor.setAttribute('aria-busy', 'true');
       const index = sources.findIndex(source => source.url === url.href);
-      const title = anchor.dataset.previewTitle || 'Bookkin app preview';
-      const source = sources[index] || { url: url.href, title, alt: anchor.querySelector('img')?.alt || `${title} — actual Bookkin interface with sample content.` };
+      const title = anchor.dataset.previewTitle || '閱見畫面預覽';
+      const source = sources[index] || { url: url.href, title, alt: anchor.querySelector('img')?.alt || `${title}，實際介面，內容為示範。` };
       try {
         await loadScreen(source);
         if (currentRequest !== request || !anchor.isConnected) return;

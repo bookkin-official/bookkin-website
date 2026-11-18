@@ -78,14 +78,14 @@ export function resolveDownloads(input = settings) {
   }
   return {
     ios: input.APP_STORE_URL
-      ? { kind: 'store', url: input.APP_STORE_URL, label: 'Download on the App Store', note: 'Available for iOS' }
+      ? { kind: 'store', url: input.APP_STORE_URL, label: '在 App Store 下載', note: '適用於 iOS' }
       : input.TESTFLIGHT_URL
-        ? { kind: 'beta', url: input.TESTFLIGHT_URL, label: 'Join the iOS beta', note: 'Beta · Requires TestFlight' }
+        ? { kind: 'beta', url: input.TESTFLIGHT_URL, label: '加入 iOS 測試', note: '測試版 · 需要 TestFlight' }
         : { kind: 'unconfigured', url: '', label: '', note: '' },
     android: input.GOOGLE_PLAY_URL
-      ? { kind: 'store', url: input.GOOGLE_PLAY_URL, label: 'Get it on Google Play', note: 'Available for Android' }
+      ? { kind: 'store', url: input.GOOGLE_PLAY_URL, label: '在 Google Play 下載', note: '適用於 Android' }
       : input.ANDROID_APK_URL
-        ? { kind: 'apk', url: input.ANDROID_APK_URL, label: 'Download Android APK', note: `Version ${apkVersion} · Direct download` }
+        ? { kind: 'apk', url: input.ANDROID_APK_URL, label: '下載 Android APK', note: `版本 ${apkVersion} · 直接下載` }
         : { kind: 'unconfigured', url: '', label: '', note: '' },
   };
 }
