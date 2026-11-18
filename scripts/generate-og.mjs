@@ -7,7 +7,7 @@ const regular = await readFile(`${fontRoot}/files/newsreader-latin-400-normal.wo
 const italic = await readFile(`${fontRoot}/files/newsreader-latin-400-italic.woff`);
 const icon = await readFile('public/bookkin-icon.png');
 const el = (type, props, ...children) => ({ type, props: { ...props, children: children.length === 1 ? children[0] : children } });
-const svg = await satori(el('div', { style: { display:'flex', width:'100%', height:'100%', background:'#f6f5ef', color:'#252820', padding:'70px 80px', position:'relative', fontFamily:'Newsreader' } },
+const svg = await satori(el('div', { style: { display:'flex', width:'100%', height:'100%', background:'#eff2f7', color:'#242c3a', padding:'70px 80px', position:'relative', fontFamily:'Newsreader' } },
   el('div', { style: { display:'flex', flexDirection:'column', justifyContent:'space-between', width:'100%' } },
     el('div', { style: { display:'flex', alignItems:'center', gap:16 } },
       el('img', { src:`data:image/png;base64,${icon.toString('base64')}`, width:50, height:50, style:{ borderRadius:12 } }),
@@ -15,9 +15,9 @@ const svg = await satori(el('div', { style: { display:'flex', width:'100%', heig
     ),
     el('div', { style:{ display:'flex', flexDirection:'column', fontSize:100, letterSpacing:-4, lineHeight:1 } },
       el('div', { style:{ display:'flex' } }, 'Your books.'),
-      el('div', { style:{ display:'flex', fontStyle:'italic', color:'#6a735a' } }, 'Your kind of people.'),
+      el('div', { style:{ display:'flex', fontStyle:'italic', color:'#5c6f92' } }, 'Your kind of people.'),
     ),
-    el('div', { style:{ display:'flex', fontSize:27, color:'#676b60' } }, 'A quiet social library.'),
+    el('div', { style:{ display:'flex', fontSize:27, color:'#616c7e' } }, 'A quiet social library.'),
   ),
 ), { width:1200, height:630, fonts:[{name:'Newsreader',data:regular,weight:400,style:'normal'},{name:'Newsreader',data:italic,weight:400,style:'italic'}] });
 await mkdir('public/licenses', { recursive:true });
