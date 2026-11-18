@@ -1,0 +1,11 @@
+{
+  "name": "bookkin-website",
+  "compatibility_date": "2026-11-18",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "web.bookkin.net", "custom_domain": true }
+  ]
+}

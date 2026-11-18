@@ -24,14 +24,14 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
-      - name: Check future custom-domain paths
+      - name: Verify the Cloudflare website
         run: npm run verify
         env:
-          SITE_URL: https://website.example.com/
           ASTRO_TELEMETRY_DISABLED: '1'
-      - name: Build and verify deployment paths
+      - name: Build and verify the GitHub Pages mirror
         run: npm run verify
         env:
+          SITE_URL: https://bookkin-official.github.io/bookkin-website/
           ASTRO_TELEMETRY_DISABLED: '1'
       - name: Configure Pages
         if: github.event_name != 'pull_request'

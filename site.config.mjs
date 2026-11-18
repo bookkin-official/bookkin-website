@@ -1,7 +1,7 @@
 // All values here are public. Never put credentials in this file.
-// SITE_URL includes the project path. A custom domain uses its root URL instead.
+// The public website and the Bookkin app have separate origins.
 export const settings = {
-  SITE_URL: 'https://k1256799586.github.io/bookkin-website/',
+  SITE_URL: 'https://web.bookkin.net/',
   APP_STORE_URL: '',
   GOOGLE_PLAY_URL: '',
   TESTFLIGHT_URL: '',
@@ -90,6 +90,6 @@ export function resolveDownloads(input = settings) {
   };
 }
 
-// Build-time override is useful for testing a future custom domain.
+// The GitHub Pages build supplies its own origin and project path.
 export const site = resolveSite({ ...settings, SITE_URL: process.env.SITE_URL || settings.SITE_URL });
 export const downloads = resolveDownloads(settings);

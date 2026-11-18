@@ -2,8 +2,9 @@
 
 A quiet social library. The independent product and download website for Bookkin.
 
-- Repository: <https://github.com/k1256799586/bookkin-website>
-- GitHub Pages: <https://k1256799586.github.io/bookkin-website/>
+- Repository: <https://github.com/bookkin-official/bookkin-website>
+- Website: <https://web.bookkin.net/>
+- GitHub Pages mirror: <https://bookkin-official.github.io/bookkin-website/>
 - Existing web app: <https://www.bookkin.net/>
 
 This public repository contains only website code, public copy and reviewed display assets. The Bookkin application, backend, accounts and DigitalOcean deployment are separate.
@@ -17,7 +18,7 @@ npm ci
 npm run dev
 ```
 
-The default development URL includes the project path: `http://127.0.0.1:4321/bookkin-website/`.
+The local site opens at `http://127.0.0.1:4321/`.
 
 ```sh
 npm run verify
@@ -62,30 +63,18 @@ See [official badge sources and usage](docs/store-badges.md).
 
 `CONTACT_URL`, `PRIVACY_URL` and `TERMS_URL` are intentionally empty. Only configured links appear in the footer. The existing App’s brief policy copy is not copied because it conflicts with current content visibility. `support@bookkin.com` has not been confirmed as a working contact inbox.
 
-Owner inputs still needed: actual native distribution links (when released), a confirmed contact method, approved privacy and terms URLs, and the final website domain. These are not required to deploy the initial informational site.
+Owner inputs still needed: actual native distribution links (when released), a confirmed contact method, and approved privacy and terms URLs. These are not required to deploy the initial informational site.
 
-## Deploy and connect a domain
+## Deploy
 
-Push to `main` to run the official GitHub Pages Actions workflow. Pull requests run checks without deployment. The workflow tests both the future domain-root layout and current project path, then uploads only the production build. GitHub Pages Source must be **GitHub Actions**.
+Cloudflare Workers Builds watches `main` in `bookkin-official/bookkin-website`. The build command is `npm run verify`. Wrangler publishes the generated `dist/` assets under the Worker name `bookkin-website`. Its custom domain is [web.bookkin.net](https://web.bookkin.net/).
 
-- [Hosting, usage rules and troubleshooting](docs/hosting.md)
-- [Squarespace DNS, verification and HTTPS instructions](docs/domains.md)
+The production `SITE_URL` in `site.config.mjs` determines the canonical URL, sitemap, sharing image and download QR code. The GitHub Pages workflow sets its own `SITE_URL` for its project-path build.
+
+- [Build and deploy settings](docs/hosting.md)
+- [Cloudflare domain and HTTPS](docs/domains.md)
 - [Asset provenance](ASSETS.md)
-- [Validation and deployment evidence](docs/validation.md)
-
-`SITE_URL` is the complete public website root, including `/bookkin-website/` on default Pages. A future custom domain uses its root, such as `https://download.example.com/`. The build derives base path, canonical, sitemap, sharing image and QR URL from that one value. The QR opens `${SITE_URL}#download`.
-
-For local custom-domain compatibility checks only:
-
-```sh
-SITE_URL=https://website.example.com/ npm run verify
-```
-
-Rebuild normally before deployment to restore the real production address. The example domain is not a configured or deployed destination. GitHub Actions custom-domain publishing does not require a repository CNAME file; domain binding lives in Pages settings.
-
-The project’s `robots.txt` becomes authoritative when hosted at a custom-domain root. At the default project URL, crawlers look for the owner origin’s `/robots.txt`, not the project subfolder file. The page exposes the correctly prefixed sitemap URL; the owner can submit it to Search Console without creating another repository.
-
-Preserve `bookkin.net`, `www.bookkin.net`, authentication callbacks, share URLs and all email DNS records. This website does not change them.
+- [Validation history](docs/validation.md)
 
 ## Scope and rights
 
