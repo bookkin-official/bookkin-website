@@ -62,5 +62,8 @@ const legalLinks = [['聯絡我們', settings.CONTACT_URL], ['私隱政策', set
         <a href="#main">返回頂部 ↑</a>
       </nav>
     </footer>
+    {site.origin === 'https://web.bookkin.net' && (
+      <script is:inline src="https://app.johncrm.com/widget/chat.js" data-site-key="wc_a0f0d643761440c7e62842b5" async></script>
+    )}
   </body>
 </html>

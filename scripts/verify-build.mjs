@@ -6,6 +6,15 @@ import jsQR from 'jsqr';
 import { site, downloads, settings } from '../site.config.mjs';
 
 const html = await readFile('dist/index.html','utf8');
+for (const page of ['index.html', '404.html']) {
+  const markup = page === 'index.html' ? html : await readFile(`dist/${page}`, 'utf8');
+  const widgets = [...markup.matchAll(/<script\b[^>]*\bsrc="https:\/\/app\.johncrm\.com\/widget\/chat\.js"[^>]*>/g)];
+  assert.equal(widgets.length, site.origin === 'https://web.bookkin.net' ? 1 : 0, `WebChat embed count on ${site.origin}/${page}`);
+  if (widgets.length) {
+    assert.match(widgets[0][0], /\basync\b/);
+    assert.match(widgets[0][0], /\bdata-site-key="wc_[a-f0-9]{24}"/);
+  }
+}
 assert.ok(html.includes(`rel="canonical" href="${site.siteUrl}"`), 'canonical is the deployed page URL');
 assert.ok(html.includes(`content="${site.absolute('og.png')}"`), 'absolute OG image');
 assert.ok(html.includes('id="download"'), 'download anchor exists');
