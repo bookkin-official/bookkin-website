@@ -1,42 +1,35 @@
 # Asset provenance
 
-## Bookkin product screenshots
+## Current app captures
 
-| File | Content | Dimensions |
-| --- | --- | --- |
-| `src/assets/app-profile.png` | Profile, favourite books and bookshelf collections | 780 × 1800 px |
-| `src/assets/app-people.png` | Reader discovery and readers’ favourite books | 780 × 1800 px |
-| `src/assets/app-home.png` | Community feed with shared bookshelves | 780 × 1800 px |
+`src/assets/screens/` contains Profile, People and scanner review captures in English (`en`), Traditional Chinese (`hant`) and Simplified Chinese (`hans`). Each PNG is 780 × 1688 pixels, rendered from actual Flutter widgets at 390 × 844 logical pixels on 19 November 2026.
 
-These images are captures of the actual Bookkin Flutter interface from app source revision `e095c4e414935aa5987e2d00e2a98da2ce6b2732`, rendered at a 390 × 900 logical-pixel viewport at 2× resolution on 4 October 2026. The English Original appearance and existing app components are used. They are not proposed interfaces or AI-generated mockups.
+Source revision is `0ca4d243ff4aeb002d3f9e80343732ccddf97254`. Profile and People use AppShell navigation. Scanner review uses BookScannerScreen with injected recognition fixture results. Captures use the current app's normal appearance, cover-based shelves and original interface geometry. The source revision is recorded explicitly because newer app revisions can arrive independently of this website.
 
-All account names, biographies, posts, interests and connections in these captures are local demonstration data. No production account, private user content or live service was used. Follower, following and engagement counts are zero; screenshots are not evidence of audience size or activity. The Home privacy notice was dismissed through its existing “Got it” control before capture.
+Accounts, biographies, counts and book arrangements are local demonstration data. The screenshots use Bookkin's generated default covers for sample book records. They contain no production reader data and do not demonstrate live recognition, provider approval or audience size. Scanner results are provided by the fixture. No account, database or live provider request was involved.
 
-The sample shelves use real book titles and authors, including *The Secret Garden*, *Pride and Prejudice*, *Walden*, *Emma*, *The Time Machine*, *A Room of One’s Own*, *Frankenstein* and *Leaves of Grass*. The coloured book spines are Bookkin’s existing illustrative bindings generated from book identity. They are not publisher cover artwork. No external cover photographs or reader portraits are included.
+Reproduce with `scripts/refresh-app-screens.ps1`. The retained fixture and additional limitations are in `scripts/fixtures/README.md`. All nine captures passed their locale render test, fixed-dimension and icon-pixel checks. The visible caption is localized from “Actual Bookkin interface · sample content”.
 
-The website uses a closer crop of the bookshelf on small screens so books appear earlier. This is a CSS preview crop of the same capture; the “View screen” / “Tap to explore the screens” affordance opens the complete, unaltered screen in a manual gallery. The gallery provides a full-size original image link.
+Older October app-profile/app-people/app-home assets are retained as historical originals and are no longer used by the redesigned page.
 
-Recommended visible caption: **“Actual Bookkin interface with sample content.”**
+## Generated editorial photographs
 
-To replace a screenshot, export a current real app screen at the same aspect ratio, review every visible account and data field for publication, and replace the corresponding PNG. Keep the caption accurate. Product functionality and public release availability must be verified separately from screenshot capture.
+The three original PNGs in `src/assets/lifestyle/` were generated with the built-in image-generation tool on 19 November 2026 for Bookkin's official website. They depict fictional readers in a Hong Kong neighbourhood bookshop, with consistent warm timber, cream, navy and rust tones.
 
-## Brand assets
+- `bookshop-reading.png` shows a reader using a phone beside sunlit shelves.
+- `bookshop-scan.png` shows a reader holding a phone toward book spines. The first output had the phone reversed. The selected revision corrects its orientation and uses the actual `scan-en.png` as the screen reference.
+- `bookshop-friends.png` shows two readers sharing a book and a phone at a table.
 
-- `public/bookkin-icon.png`: the existing 512 × 512 Bookkin app icon, copied without redesign.
-- `public/favicon.png`: the existing 32 × 32 Bookkin favicon, copied without redesign.
-- The Bookkin wordmark is rendered as text; the open-book mark is the existing Bookkin artwork.
+The photographic scan screen is a generated perspective rendering of the supplied real app screenshot. Unaltered, localized screenshots remain separately available in the page's app preview gallery. The editorial scene retains its English scan screen in every language edition. Lifestyle imagery does not document actual Bookkin customers. The localized footer discloses AI-created editorial scenes and sample app content.
 
-Bookkin brand assets and product interface captures are used for the official Bookkin product website. They are not offered as general-purpose stock assets.
+Astro creates responsive WebP files for delivery. Keep complete source PNGs for future approved edits.
 
-## Website fonts
+## Brand, fonts and store badge
 
-- **Newsreader**, self-hosted using `@fontsource/newsreader`.
-- **Manrope**, self-hosted using `@fontsource-variable/manrope`.
+The existing Bookkin icon and favicon are reused. Newsreader and Manrope remain self-hosted with their SIL Open Font License notices under `public/licenses/`. System fonts render Chinese copy without a third-party font request.
 
-Both font families are distributed under the SIL Open Font License 1.1. The website keeps the font packages’ license notices in `public/licenses/`. Website fonts do not replace the fonts inside the captured app interface.
+`public/store-badges/google-play.png` is the original official badge. Preserve its artwork and proportions, provide surrounding clear space, and link to the verified Bookkin listing. See `docs/store-badges.md`. Google Play and the Google Play logo are trademarks of Google LLC.
 
 ## Generated site graphics
 
-The download QR code is generated from the configured deployment URL and the download section fragment. It should be regenerated when the site URL or base path changes. Social preview artwork, where present, is composed from the Bookkin brand, website typography and these disclosed product screenshots. No AI-generated imagery is required.
-
-Only the finished public visual assets belong in this repository. App source, screenshot fixture code, account storage, backend configuration and private repository history are intentionally excluded.
+The desktop QR is generated locally from `settings.GOOGLE_PLAY_URL` and is verified by decoding the built PNG. Each localized sharing image combines the website's original brand assets, typography, generated reading photograph and the corresponding real app screenshot. The build also retains `og.png` as an English compatibility image.

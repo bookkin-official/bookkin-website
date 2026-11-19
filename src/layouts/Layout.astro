@@ -1,69 +1,234 @@
 ---
-import { site, settings } from '../../site.config.mjs';
-import { copy } from '../content/home';
-import Icon from '../components/Icon.astro';
-import '../styles/global.css';
-import '@fontsource/newsreader/latin-400.css';
-import '@fontsource/newsreader/latin-400-italic.css';
-import sansFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
-import serifFont from '@fontsource/newsreader/files/newsreader-latin-400-normal.woff2?url';
-import italicFont from '@fontsource/newsreader/files/newsreader-latin-400-italic.woff2?url';
-interface Props { title?: string; description?: string; notFound?: boolean; }
-const { title = copy.title, description = copy.description, notFound = false } = Astro.props;
-const legalLinks = [['聯絡我們', settings.CONTACT_URL], ['私隱政策', settings.PRIVACY_URL], ['使用條款', settings.TERMS_URL]].filter(([, url]) => url);
+import { site, settings } from "../../site.config.mjs";
+import { translations, type Locale } from "../content/home";
+import { locales, resolveLanguage } from "../content/locales.mjs";
+import Icon from "../components/Icon.astro";
+import "../styles/global.css";
+import "@fontsource/newsreader/latin-400.css";
+import "@fontsource/newsreader/latin-400-italic.css";
+import sansFont from "@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url";
+import serifFont from "@fontsource/newsreader/files/newsreader-latin-400-normal.woff2?url";
+interface Props {
+  locale?: Locale;
+  autoLocale?: boolean;
+  title?: string;
+  description?: string;
+  notFound?: boolean;
+}
+const { locale = "en", autoLocale = false, notFound = false } = Astro.props;
+const copy = translations[locale];
+const { title = copy.title, description = copy.description } = Astro.props;
+const homeUrl = site.asset(`${locale}/`);
+const canonical = site.absolute(`${locale}/`);
+const languageNames = {
+  en: "English",
+  "zh-Hant": "繁體中文",
+  "zh-Hans": "简体中文",
+};
+const legalLinks = [
+  [copy.contact, settings.CONTACT_URL],
+  [copy.privacy, settings.PRIVACY_URL],
+  [copy.terms, settings.TERMS_URL],
+].filter(([, url]) => url);
+const languageRedirect = `(() => {
+  const resolveLanguage = ${resolveLanguage.toString()};
+  let saved;
+  try { saved = sessionStorage.getItem('bookkin-language'); } catch {}
+  const locale = ${JSON.stringify(locales)}.includes(saved) ? saved : resolveLanguage(navigator.languages?.length ? navigator.languages : [navigator.language]);
+  location.replace(${JSON.stringify(site.base)} + locale + '/' + location.search + location.hash);
+})();`;
 ---
+
 <!doctype html>
-<html lang="zh-Hant-HK">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {[sansFont,serifFont,italicFont].map(font=><link rel="preload" href={font} as="font" type="font/woff2" crossorigin="anonymous" />)}
-    <meta name="theme-color" content="#eff2f7" />
+    {autoLocale && <script is:inline set:html={languageRedirect} />}
+    {
+      [sansFont, serifFont].map((font) => (
+        <link
+          rel="preload"
+          href={font}
+          as="font"
+          type="font/woff2"
+          crossorigin="anonymous"
+        />
+      ))
+    }
+    <meta name="theme-color" content="#f5f1e8" />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline data-theme-bootstrap>
+      (() => {
+        let saved;
+        try { saved = sessionStorage.getItem('bookkin-theme'); } catch {}
+        const theme = saved === 'light' || saved === 'dark'
+          ? saved
+          : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#1c2630' : '#f5f1e8');
+      })();
+    </script>
     <meta name="description" content={description} />
-    {notFound ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={site.siteUrl} />}
+    {
+      notFound ? (
+        <meta name="robots" content="noindex" />
+      ) : (
+        <>
+          <link rel="canonical" href={canonical} />
+          {locales.map((language) => (
+            <link
+              rel="alternate"
+              hreflang={language}
+              href={site.absolute(`${language}/`)}
+            />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={site.siteUrl} />
+        </>
+      )
+    }
     <title>{title}</title>
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Bookkin" />
-    <meta property="og:locale" content="zh_HK" />
+    <meta
+      property="og:locale"
+      content={{ en: "en_GB", "zh-Hant": "zh_HK", "zh-Hans": "zh_CN" }[locale]}
+    />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={notFound ? site.absolute('404.html') : site.siteUrl} />
-    <meta property="og:image" content={site.absolute('og.png')} />
+    <meta
+      property="og:url"
+      content={notFound ? site.absolute("404.html") : canonical}
+    />
+    <meta property="og:image" content={site.absolute(`og-${locale}.png`)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Bookkin. Your books. Your kind of people. A quiet social library." />
+    <meta property="og:image:alt" content={copy.title} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={site.absolute('og.png')} />
-    <link rel="icon" type="image/png" href={site.asset('favicon.png')} />
-    <link rel="apple-touch-icon" href={site.asset('bookkin-icon.png')} />
-    <link rel="sitemap" href={site.absolute('sitemap-index.xml')} />
+    <meta name="twitter:image" content={site.absolute(`og-${locale}.png`)} />
+    <link rel="icon" type="image/png" href={site.asset("favicon.png")} />
+    <link rel="apple-touch-icon" href={site.asset("bookkin-icon.png")} />
+    <link rel="sitemap" href={site.absolute("sitemap-index.xml")} />
   </head>
   <body>
-    <a class="skip-link" href="#main">跳至主要內容</a>
+    <a class="skip-link" href="#main">{copy.skip}</a>
     <header class="site-header">
       <div class="nav-wrap">
-        <a class="brand" href={site.base} aria-label="閱見首頁"><img src={site.asset('bookkin-icon.png')} width="34" height="34" alt="" /><span>Bookkin<span class="brand-dot">.</span></span></a>
-        <div class="navigation-cluster"><nav aria-label="主選單">
-          <a class="nav-secondary" data-nav-section="features" href={`${site.base}#features`}>功能介紹</a>
-          <a class="nav-secondary" data-nav-section="how-it-works" href={`${site.base}#how-it-works`}>開始使用</a>
-          <a class="nav-download" data-nav-section="download" href={`${site.base}#download`}>下載 <Icon name="down" size={17} /></a>
-        </nav>
-        <details class="mobile-menu"><summary aria-label="網站選單"><span class="menu-glyph" aria-hidden="true"><span></span><span></span></span></summary><nav aria-label="手機版選單"><a href={`${site.base}#features`}>功能介紹 <Icon name="arrow" size={18} /></a><a href={`${site.base}#how-it-works`}>開始使用 <Icon name="arrow" size={18} /></a><a href={`${site.base}#faq`}>常見問題 <Icon name="arrow" size={18} /></a></nav></details>
+        <a class="brand" href={homeUrl} aria-label={copy.home}
+          ><img
+            src={site.asset("bookkin-icon.png")}
+            width="36"
+            height="36"
+            alt=""
+          /><span>Bookkin<span class="brand-dot">.</span></span></a
+        >
+        <div class="navigation-cluster">
+          <nav class="desktop-nav" aria-label={copy.menu}>
+            <a data-nav-section="features" href={`${homeUrl}#features`}
+              >{copy.nav[0]}</a
+            >
+            <a data-nav-section="how-it-works" href={`${homeUrl}#how-it-works`}
+              >{copy.nav[1]}</a
+            >
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            data-label-light={copy.themeLight}
+            data-label-dark={copy.themeDark}
+            aria-label={copy.themeDark}
+            title={copy.themeDark}
+            hidden
+          >
+            <span class="theme-sun"><Icon name="sun" size={20} /></span>
+            <span class="theme-moon"><Icon name="moon" size={20} /></span>
+          </button>
+          <details class="language-menu" data-base={site.base}>
+            <summary aria-label={copy.language}
+              ><span aria-hidden="true">文 / A</span><span class="sr-only"
+                >{copy.language}</span
+              ></summary
+            >
+            <nav aria-label={copy.language}>
+              <a href={site.base} data-use-device aria-current="true">
+                <span>{copy.device}</span><span class="language-check" aria-hidden="true"><Icon name="check" size={14} /></span>
+              </a>
+              {
+                locales.map((language) => (
+                  <a
+                    href={site.asset(`${language}/`)}
+                    lang={language}
+                    data-language={language}
+                  >
+                    <span>{languageNames[language as Locale]}</span>
+                    <span class="language-check" aria-hidden="true"><Icon name="check" size={14} /></span>
+                  </a>
+                ))
+              }
+            </nav>
+          </details>
+          <a class="nav-download" href={`${homeUrl}#download`}
+            >{copy.nav[2]}<Icon name="arrow" size={16} /></a
+          >
+          <details class="mobile-menu">
+            <summary aria-label={copy.menu}><Icon name="menu" /></summary><nav
+              aria-label={copy.menu}
+            >
+              <a href={`${homeUrl}#features`}>{copy.nav[0]}</a><a
+                href={`${homeUrl}#how-it-works`}>{copy.nav[1]}</a
+              ><a href={`${homeUrl}#download`}>{copy.nav[2]}</a>
+            </nav>
+          </details>
         </div>
       </div>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
     <footer class="site-footer wrap">
-      <p>© {new Date().getUTCFullYear()} Bookkin</p>
-      <nav aria-label="頁尾選單">
-        {legalLinks.map(([label, url]) => <a href={url}>{label}</a>)}
-        <a href="#main">返回頂部 ↑</a>
-      </nav>
+      <div class="footer-top">
+        <a class="brand" href={homeUrl}
+          ><span>Bookkin<span class="brand-dot">.</span></span></a
+        ><p>{copy.footer}</p><a class="text-link" href="#main"
+          >{copy.top}<Icon name="down" size={16} /></a>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          © {new Date().getUTCFullYear()} Bookkin · Onepile Tech Limited
+        </p><nav aria-label={copy.menu}>
+          {legalLinks.map(([label, url]) => <a href={url}>{label}</a>)}
+        </nav><p>{copy.credit}</p><p>{copy.trademark}</p>
+      </div>
     </footer>
-    {site.origin === 'https://web.bookkin.net' && (
-      <script is:inline src="https://app.johncrm.com/widget/chat.js" data-site-key="wc_a0f0d643761440c7e62842b5" async></script>
-    )}
+    {
+      site.origin === "https://web.bookkin.net" && (
+        <script
+          is:inline
+          src="https://app.johncrm.com/widget/chat.js"
+          data-site-key="wc_a0f0d643761440c7e62842b5"
+          async
+        />
+      )
+    }
+    <script>
+      import "../scripts/theme";
+      import "../scripts/language";
+      import "../scripts/scrollbar";
+      document
+        .querySelectorAll<HTMLDetailsElement>(".mobile-menu")
+        .forEach((menu) => {
+          document.addEventListener("pointerdown", (event) => {
+            if (event.target instanceof Node && !menu.contains(event.target))
+              menu.open = false;
+          });
+          menu.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+              menu.open = false;
+              menu.querySelector("summary")?.focus();
+            }
+          });
+        });
+    </script>
   </body>
 </html>

@@ -1,0 +1,17 @@
+---
+import { site } from "../../site.config.mjs";
+interface Props {
+  label: string;
+  url: string;
+}
+const { label, url } = Astro.props;
+---
+
+<a href={url} class="store-badge" aria-label={label}
+  ><img
+    src={site.asset("store-badges/google-play.png")}
+    alt={label}
+    width="478"
+    height="142"
+  /></a
+>

@@ -1,0 +1,297 @@
+---
+import { Image, getImage } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import Icon from "./Icon.astro";
+import PlayBadge from "./PlayBadge.astro";
+import { site, settings } from "../../site.config.mjs";
+import { translations, type Locale } from "../content/home";
+import reading from "../assets/lifestyle/bookshop-reading.png";
+import scanning from "../assets/lifestyle/bookshop-scan.png";
+import friends from "../assets/lifestyle/bookshop-friends.png";
+interface Props {
+  locale: Locale;
+  autoLocale?: boolean;
+}
+const { locale, autoLocale = false } = Astro.props;
+const copy = translations[locale];
+const screens = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/screens/*.png",
+  { eager: true },
+);
+const shortLocale = { en: "en", "zh-Hant": "hant", "zh-Hans": "hans" }[locale];
+const screen = (name: string) =>
+  screens[`../assets/screens/${name}-${shortLocale}.png`].default;
+const previewImages = [screen("scan"), screen("profile"), screen("people")];
+const fullImages = await Promise.all(
+  previewImages.map((src) =>
+    getImage({ src, width: 780, format: "webp", quality: 92 }),
+  ),
+);
+const photos = [scanning, reading, friends];
+const chapterIcons = ["phone", "book", "people"] as const;
+---
+
+<Layout locale={locale} autoLocale={autoLocale}>
+  <section class="hero wrap" aria-labelledby="hero-heading">
+    <div class="hero-copy" data-enter>
+      <p class="eyebrow">{copy.hero.eyebrow}</p>
+      <h1 id="hero-heading">
+        {
+          copy.hero.lines.map((line, index) => (
+            <span class:list={{ "hero-italic": index === 1 }}>{line}</span>
+          ))
+        }
+      </h1>
+      <p class="hero-description">{copy.hero.text}</p>
+      <div class="hero-actions">
+        <PlayBadge label={copy.play} url={settings.GOOGLE_PLAY_URL} />
+      </div>
+    </div>
+    <figure class="hero-visual" data-enter>
+      <div class="hero-photo">
+        <Image
+          src={reading}
+          alt={copy.photoAlt}
+          widths={[640, 960, 1400]}
+          sizes="(max-width: 760px) 100vw, 55vw"
+          width={960}
+          format="webp"
+          quality={85}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <a
+        class="hero-app phone"
+        href={fullImages[1].src}
+        data-preview
+        data-preview-title={copy.chapters[1].screen}
+        aria-label={`${copy.view} — ${copy.chapters[1].screen}`}
+        ><Image
+          src={previewImages[1]}
+          alt={copy.chapters[1].alt}
+          width={260}
+          format="webp"
+          quality={90}
+          loading="eager"
+        /></a
+      >
+      <figcaption>
+        {copy.photoCaption}<span aria-hidden="true">↗</span>
+      </figcaption>
+    </figure>
+  </section>
+  <section
+    id="features"
+    class="features wrap"
+    aria-labelledby="features-heading"
+  >
+    <div class="section-heading" data-reveal>
+      <h2 id="features-heading">{copy.tourTitle}</h2><p>{copy.tourIntro}</p>
+    </div>
+    <div class="product-tour" data-tour>
+      <div
+        class="shelf-controls"
+        data-tour-controls
+        hidden
+        aria-label={copy.nav[0]}
+      >
+        {
+          copy.chapters.map((chapter, index) => (
+            <button
+              class={`chapter-book chapter-book-${index}`}
+              type="button"
+              data-tour-tab
+              data-index={index}
+              id={`tour-tab-${index}`}
+              aria-controls={`tour-panel-${index}`}
+            >
+              <>
+                <span class="book-rule" aria-hidden="true" />
+                <span class="chapter-book-title">{chapter.tab}</span>
+                <span class="book-emblem" aria-hidden="true">
+                  <Icon name={chapterIcons[index]} size={30} />
+                </span>
+                <span class="book-brand" aria-hidden="true">
+                  Bookkin
+                </span>
+              </>
+            </button>
+          ))
+        }
+      </div>
+      {
+        copy.chapters.map((chapter, index) => (
+          <article
+            class={`tour-panel tour-panel-${index}`}
+            id={`tour-panel-${index}`}
+            data-tour-panel
+          >
+            <div class="chapter-photo">
+              <Image
+                src={photos[index]}
+                alt={chapter.photoAlt}
+                widths={[480, 800, 1100]}
+                sizes="(max-width: 760px) 100vw, 45vw"
+                width={800}
+                format="webp"
+                quality={85}
+                loading="lazy"
+              />
+            </div>
+            <div class="feature-copy">
+              <>
+                <h3>{chapter.title}</h3>
+                <p>{chapter.text}</p>
+                <a
+                  class="text-link"
+                  href={fullImages[index].src}
+                  data-preview
+                  data-preview-title={chapter.screen}
+                >
+                  {copy.view}
+                  <Icon name="expand" size={16} />
+                  <span class="sr-only"> — {chapter.screen}</span>
+                </a>
+              </>
+            </div>
+            <figure class="feature-visual">
+              <>
+                <a
+                  class="phone feature-phone"
+                  href={fullImages[index].src}
+                  data-preview
+                  data-preview-title={chapter.screen}
+                  aria-label={`${copy.view} — ${chapter.screen}`}
+                >
+                  <Image
+                    src={previewImages[index]}
+                    alt={chapter.alt}
+                    widths={[260, 520]}
+                    sizes="(max-width: 760px) 200px, 220px"
+                    width={260}
+                    format="webp"
+                    quality={92}
+                    loading="lazy"
+                  />
+                </a>
+                <figcaption>{copy.actual}</figcaption>
+              </>
+            </figure>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+  <section
+    id="how-it-works"
+    class="how-section wrap"
+    aria-labelledby="how-heading"
+  >
+    <div class="how-heading" data-reveal>
+      <p class="eyebrow">Bookkin</p><h2 id="how-heading">{copy.startTitle}</h2>
+    </div><ol class="steps">
+      {
+        copy.steps.map((step) => (
+          <li data-reveal>
+            <>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+  <section
+    id="download"
+    class="download-section"
+    aria-labelledby="download-heading"
+  >
+    <div class="download-panel wrap">
+      <div class="download-copy" data-reveal>
+        <Icon name="book" size={40} /><h2 id="download-heading">
+          {copy.downloadTitle}
+        </h2><p>{copy.downloadText}</p><div class="download-actions">
+          <PlayBadge label={copy.play} url={settings.GOOGLE_PLAY_URL} />
+        </div>
+      </div><aside class="qr-panel">
+        <a href={settings.GOOGLE_PLAY_URL} aria-label={copy.play}
+          ><img
+            src={site.asset("download-qr.png")}
+            alt={copy.qrAlt}
+            width="180"
+            height="180"
+            loading="lazy"
+          /></a
+        ><p>{copy.qr}</p>
+      </aside>
+    </div>
+  </section>
+  <section id="faq" class="faq-section wrap" aria-labelledby="faq-heading">
+    <h2 id="faq-heading" data-reveal>{copy.faqTitle}</h2><div class="faq-list">
+      {
+        copy.faqs.map((faq) => (
+          <details>
+            <>
+              <summary>
+                {faq.question}
+                <Icon name="plus" size={20} />
+              </summary>
+              <div class="faq-answer">
+                <p>{faq.answer}</p>
+              </div>
+            </>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+  <dialog
+    id="screen-preview"
+    class="screen-dialog"
+    aria-labelledby="screen-preview-heading"
+    data-loading={copy.loading}
+    data-error={copy.loadError}
+  >
+    <div class="dialog-heading">
+      <h2 id="screen-preview-heading" data-preview-heading>
+        {copy.nav[0]}
+      </h2><button type="button" data-preview-close aria-label={copy.close}
+        ><Icon name="close" /></button
+      >
+    </div>
+    <nav class="preview-tabs" aria-label={copy.previewNav}>
+      {
+        copy.chapters.map((chapter, index) => (
+          <button
+            type="button"
+            data-preview-select
+            data-index={index}
+            aria-pressed={index === 0 ? "true" : "false"}
+          >
+            {chapter.tab}
+          </button>
+        ))
+      }
+    </nav>
+    <div
+      class="preview-frame"
+      data-preview-frame
+    >
+      <img data-preview-image width="780" height="1688" alt="" />
+    </div>
+    <div class="preview-footer">
+      <p>{copy.actual}</p><a
+        href={fullImages[0].src}
+        data-preview-original
+        target="_blank"
+        rel="noopener">{copy.original}<Icon name="expand" size={15} /></a
+      >
+    </div>
+    <p class="sr-only" role="status" data-preview-status></p>
+  </dialog>
+</Layout>
+<script>
+  import "../scripts/experience";
+</script>

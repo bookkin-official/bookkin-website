@@ -1,3 +1,39 @@
+# Device defaults and header motion — 19 November 2026
+
+- Header controls retain their resting position on hover. Get Bookkin uses a left-to-right background swipe and horizontal arrow feedback. Browser measurements confirmed identical before/after vertical positions for the download link, navigation link, theme button, language button and brand.
+- The language menu uses a 180 ms fade/scale entrance and a 140 ms exit. Verified rapid open/close reversal, Escape focus return, Tab dismissal, default checked device-language entry, and immediate reduced-motion changes.
+- Manual language/theme choices now use sessionStorage for the current tab visit. A fresh tab uses device settings. Verified a Hong Kong device preference routing to Traditional Chinese with dark appearance, manual English/light choices surviving navigation and reload in that tab, and a separate fresh tab using device settings with empty session preferences.
+- Eleven emitted bootstrap cases passed for session choices, device preferences, invalid/denied storage and retained query/section links. Persistent preferences from the earlier implementation no longer set new-visit defaults.
+- Menu bounds remained inside the viewport for EN/Hant/Hans at 320, 390 and 1280 px, including 180% text at 320 px. No horizontal overflow was found.
+- `npm run verify` passed with 23 checked files, zero Astro diagnostics and 12 Node tests. Production and GitHub Pages builds both passed static verification. The final local build uses the production domain configuration.
+- A concurrent scrollbar addition had a TypeScript timer error. Qualifying its existing timer as window.setTimeout resolves the browser/Node type mismatch.
+- Browser checks used Chromium. Publication remains pending.
+# Header and preview refinements — 19 November 2026
+
+- Added a localized 44 px sun/moon control. Verified the actual 450 ms circular View Transition, icon rotation, fallback colour fade, reduced-motion instant update, keyboard activation, persistence across language pages and continued device changes until a manual choice.
+- Evaluated seven emitted head-bootstrap cases covering saved light/dark, device preferences, invalid values and denied storage. Also exercised a browser with unavailable View Transitions and failed storage writes.
+- Removed both web-app CTAs and the complete Take a look inside cue. Updated the static verifier to enforce these removals and the theme control.
+- Shared phone frames use 2 px padding and a 1 px edge. The hero's resting angle is three degrees. Header hover feedback uses animated underlines, small lifts, soft icon surfaces and arrow movement, with reduced-motion overrides.
+- Full screenshots fit the flexible popup centre. Across 18 EN/Hant/Hans × light/dark × 320/390/1280 px browser cases, every popup fitted its image with no internal or outer scrolling. No page had horizontal overflow. All three locales also passed at 844 × 390 and at 180% text on 320 px.
+- Preview screen switching, Escape and focus return were exercised. The no-script fallback retains three readable chapters and hides the inactive theme control.
+- `npm run verify` passed with 21 files checked, zero Astro diagnostics and 12 Node tests. Production and GitHub Pages path builds both passed the static verifier. The final local build uses the production configuration.
+- Verification used Chromium browser emulation. Publication remains pending.
+# Redesign verification — 19 November 2026
+
+The neighbourhood bookshop redesign is implemented locally in the website main checkout. Publication remains pending.
+
+- Restored dependencies with `npm ci` against the existing lockfile. Package manifests are unchanged.
+- `npm run verify` passed with 20 checked files, zero Astro diagnostics, 12 Node tests, production assets, localized metadata, sitemap and decoded Google Play QR.
+- A separate build with `SITE_URL=https://bookkin-official.github.io/bookkin-website/` passed the same static verifier. The final local `dist` uses the production domain configuration.
+- Chromium browser checks covered EN, Traditional Chinese and Simplified Chinese at 320, 390 and 1280 px, in light and dark appearance. No horizontal overflow was found. At 320 px, 180% text sizing also reflowed without horizontal overflow for all three editions.
+- Shelf selection, Arrow/End navigation, mobile menu section navigation, screenshot dialog, keyboard image scrolling, Escape and focus restoration were exercised. Reduced motion produced zero active animations and automatic scrolling. This is browser emulation of the preference.
+- The root URL honoured a saved manual language, restored a Hong Kong browser preference through Use device language, and preserved `#download`. A reviewer also evaluated six emitted redirect cases including denied storage and ordered language preferences.
+- With JavaScript disabled, the root displayed English, all three feature chapters remained readable, enhancement controls stayed hidden and language/image links remained available.
+- Nine actual Flutter fixture captures passed their render checks at 780 × 1688. Captures demonstrate local sample content. See `scripts/fixtures/README.md`.
+- The existing chat embed is retained. Its provider returned HTTP 404 during localhost testing, so this pass does not verify live chat service. Safari, Firefox, physical-device camera use, live recognition and an actual Play Store installation were not exercised.
+- `git diff --check` passed. Application source retains its original unrelated working-tree edit.
+
+The records below describe earlier website revisions.
 # 验证记录
 
 日期：2026-10-04。范围：独立 Bookkin 官网；现有应用与 DNS 未改动。

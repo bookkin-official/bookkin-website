@@ -3,7 +3,7 @@
 export const settings = {
   SITE_URL: 'https://web.bookkin.net/',
   APP_STORE_URL: '',
-  GOOGLE_PLAY_URL: '',
+  GOOGLE_PLAY_URL: 'https://play.google.com/store/apps/details?id=app.bookkin.bookkin',
   TESTFLIGHT_URL: '',
   ANDROID_APK_URL: '',
   ANDROID_APK_VERSION: '',
