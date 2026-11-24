@@ -20,6 +20,14 @@ Use a shared phone frame with 2 px padding, a 1 px graphite edge, 22 px outer co
 
 Image previews fit the complete screenshot into the popup's flexible centre area. Header, screen selectors and original-image access surround it. Ordinary viewports show the complete image without internal scrolling. Very short viewports and enlarged controls may scroll the outer dialog.
 
+## Policy and support pages
+
+Privacy policy, Terms of use, Community & child safety, Help & support and Delete your Bookkin account share one document layout. A small uppercase label names the category, then a serif title, an italic summary (upright in Chinese), and a line with the operator, last-updated date and contact email. Above 1100 px a sticky contents list with 44 px rows sits beside the text. Narrower screens replace it with a native disclosure that opens the same links, so the first section stays close to the top of a phone screen.
+
+Body copy is 1 rem Manrope at 1.8 line height in a 40 rem column, with a rule between sections. Help and deletion pages open the web app with a bordered action that shares the Get Bookkin fill and focus treatment; deletion also links the receipt checker on the app origin. Related pages sit in a surface-coloured panel.
+
+Every edition has the same sections and section anchors, so a section link survives a language change. The language menu and each page's language-neutral copy (`/privacy/` and so on) keep the current document, query and fragment. The footer links to all five pages in the current language.
+
 At compact widths, stack the hero and chapter photography above their copy and screenshots. Let long translations and enlarged text wrap. Keep download actions available without a QR, which is displayed on desktop. Provide English, Traditional Chinese and Simplified Chinese throughout.
 
 ## Product and imagery

@@ -2,6 +2,7 @@
 import { site, settings } from "../../site.config.mjs";
 import { translations, type Locale } from "../content/home";
 import { locales, resolveLanguage } from "../content/locales.mjs";
+import { documentKeys } from "../content/documents";
 import Icon from "../components/Icon.astro";
 import "../styles/global.css";
 import "@fontsource/newsreader/latin-400.css";
@@ -14,12 +15,19 @@ interface Props {
   title?: string;
   description?: string;
   notFound?: boolean;
+  // Page inside a language edition, such as "privacy/". Empty is the home page.
+  path?: string;
 }
-const { locale = "en", autoLocale = false, notFound = false } = Astro.props;
+const {
+  locale = "en",
+  autoLocale = false,
+  notFound = false,
+  path = "",
+} = Astro.props;
 const copy = translations[locale];
 const { title = copy.title, description = copy.description } = Astro.props;
 const homeUrl = site.asset(`${locale}/`);
-const canonical = site.absolute(`${locale}/`);
+const canonical = site.absolute(`${locale}/${path}`);
 const languageNames = {
   en: "English",
   "zh-Hant": "繁體中文",
@@ -27,15 +35,17 @@ const languageNames = {
 };
 const legalLinks = [
   [copy.contact, settings.CONTACT_URL],
-  [copy.privacy, settings.PRIVACY_URL],
-  [copy.terms, settings.TERMS_URL],
+  ...documentKeys.map(
+    (document) =>
+      [copy.documents.footer[document], site.asset(`${locale}/${document}/`)],
+  ),
 ].filter(([, url]) => url);
 const languageRedirect = `(() => {
   const resolveLanguage = ${resolveLanguage.toString()};
   let saved;
   try { saved = sessionStorage.getItem('bookkin-language'); } catch {}
   const locale = ${JSON.stringify(locales)}.includes(saved) ? saved : resolveLanguage(navigator.languages?.length ? navigator.languages : [navigator.language]);
-  location.replace(${JSON.stringify(site.base)} + locale + '/' + location.search + location.hash);
+  location.replace(${JSON.stringify(site.base)} + locale + '/' + ${JSON.stringify(path)} + location.search + location.hash);
 })();`;
 ---
 
@@ -80,10 +90,10 @@ const languageRedirect = `(() => {
             <link
               rel="alternate"
               hreflang={language}
-              href={site.absolute(`${language}/`)}
+              href={site.absolute(`${language}/${path}`)}
             />
           ))}
-          <link rel="alternate" hreflang="x-default" href={site.siteUrl} />
+          <link rel="alternate" hreflang="x-default" href={site.absolute(path)} />
         </>
       )
     }
@@ -146,20 +156,20 @@ const languageRedirect = `(() => {
             <span class="theme-sun"><Icon name="sun" size={20} /></span>
             <span class="theme-moon"><Icon name="moon" size={20} /></span>
           </button>
-          <details class="language-menu" data-base={site.base}>
+          <details class="language-menu" data-base={site.base} data-path={path}>
             <summary aria-label={copy.language}
               ><span aria-hidden="true">文 / A</span><span class="sr-only"
                 >{copy.language}</span
               ></summary
             >
             <nav aria-label={copy.language}>
-              <a href={site.base} data-use-device aria-current="true">
+              <a href={site.asset(path)} data-use-device aria-current="true">
                 <span>{copy.device}</span><span class="language-check" aria-hidden="true"><Icon name="check" size={14} /></span>
               </a>
               {
                 locales.map((language) => (
                   <a
-                    href={site.asset(`${language}/`)}
+                    href={site.asset(`${language}/${path}`)}
                     lang={language}
                     data-language={language}
                   >
@@ -196,7 +206,7 @@ const languageRedirect = `(() => {
       <div class="footer-bottom">
         <p>
           © {new Date().getUTCFullYear()} Bookkin · Onepile Tech Limited
-        </p><nav aria-label={copy.menu}>
+        </p><nav aria-label={copy.documents.relatedMenu}>
           {legalLinks.map(([label, url]) => <a href={url}>{label}</a>)}
         </nav><p>{copy.credit}</p><p>{copy.trademark}</p>
       </div>

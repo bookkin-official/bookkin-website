@@ -115,7 +115,11 @@ if (menu && summary && navigation) {
     if (selected) return;
     const language = resolveLanguage([...navigator.languages]);
     if (language === document.documentElement.lang) return;
-    const target = new URL(`${menu.dataset.base}${language}/`, location.origin);
+    // A document page keeps its path when the device language changes.
+    const target = new URL(
+      `${menu.dataset.base}${language}/${menu.dataset.path ?? ""}`,
+      location.origin,
+    );
     target.search = location.search;
     target.hash = location.hash;
     location.replace(target.href);

@@ -1,0 +1,15 @@
+---
+import Document from "../../components/Document.astro";
+import { locales } from "../../content/locales.mjs";
+import { documentKeys, type DocumentKey } from "../../content/documents";
+import type { Locale } from "../../content/home";
+export function getStaticPaths() {
+  return locales.flatMap((locale) =>
+    documentKeys.map((document) => ({ params: { locale, document } })),
+  );
+}
+const locale = Astro.params.locale as Locale;
+const document = Astro.params.document as DocumentKey;
+---
+
+<Document locale={locale} document={document} />

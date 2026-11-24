@@ -11,8 +11,6 @@ export const settings = {
   ANDROID_APK_RELEASE_VERIFIED: false,
   WEB_APP_URL: 'https://www.bookkin.net/',
   CONTACT_URL: '',
-  PRIVACY_URL: '',
-  TERMS_URL: '',
 };
 
 function parseHttpsUrl(value, name) {
@@ -67,7 +65,7 @@ export function resolveSite(input = settings) {
 }
 
 export function resolveDownloads(input = settings) {
-  for (const key of ['APP_STORE_URL', 'GOOGLE_PLAY_URL', 'TESTFLIGHT_URL', 'ANDROID_APK_URL', 'WEB_APP_URL', 'PRIVACY_URL', 'TERMS_URL']) {
+  for (const key of ['APP_STORE_URL', 'GOOGLE_PLAY_URL', 'TESTFLIGHT_URL', 'ANDROID_APK_URL', 'WEB_APP_URL']) {
     if (input[key] === '' || input[key] == null) continue;
     parseHttpsUrl(input[key], key);
   }

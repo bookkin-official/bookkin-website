@@ -6,7 +6,7 @@ import { resolveSite, resolveDownloads } from '../site.config.mjs';
 const unpublished = {
   APP_STORE_URL: '', GOOGLE_PLAY_URL: '', TESTFLIGHT_URL: '', ANDROID_APK_URL: '',
   ANDROID_APK_VERSION: '', ANDROID_APK_RELEASE_VERIFIED: false,
-  WEB_APP_URL: '', CONTACT_URL: '', PRIVACY_URL: '', TERMS_URL: '',
+  WEB_APP_URL: '', CONTACT_URL: '',
 };
 
 test('project URLs include the base exactly once', () => {

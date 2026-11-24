@@ -5,18 +5,49 @@ import sharp from "sharp";
 import jsQR from "jsqr";
 import { site, settings } from "../site.config.mjs";
 import { locales } from "../src/content/locales.mjs";
+import {
+  documents,
+  documentKeys,
+  sectionIds,
+} from "../src/content/documents.ts";
 
+// Each page knows its language, kind and path inside the edition.
 const pages = [
-  "index.html",
-  ...locales.map((locale) => `${locale}/index.html`),
-  "404.html",
+  { file: "index.html", locale: "en", kind: "home", path: "" },
+  ...locales.map((locale) => ({
+    file: `${locale}/index.html`,
+    locale,
+    kind: "home",
+    path: "",
+  })),
+  ...documentKeys.flatMap((document) => [
+    {
+      file: `${document}/index.html`,
+      locale: "en",
+      kind: "document",
+      path: `${document}/`,
+      document,
+      redirects: true,
+    },
+    ...locales.map((locale) => ({
+      file: `${locale}/${document}/index.html`,
+      locale,
+      kind: "document",
+      path: `${document}/`,
+      document,
+      redirects: false,
+    })),
+  ]),
+  { file: "404.html", locale: "en", kind: "not-found", path: "" },
 ];
+const escape = (text) =>
+  text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const localPaths = new Set();
-for (const page of pages) {
+for (const entry of pages) {
+  const page = entry.file;
+  const { locale, kind, path } = entry;
   const html = await readFile(`dist/${page}`, "utf8");
-  const is404 = page === "404.html";
-  const locale =
-    locales.find((language) => page.startsWith(`${language}/`)) || "en";
+  const is404 = kind === "not-found";
   const widgets = [
     ...html.matchAll(
       /<script\b[^>]*\bsrc="https:\/\/app\.johncrm\.com\/widget\/chat\.js"[^>]*>/g,
@@ -31,7 +62,9 @@ for (const page of pages) {
   assert.ok(html.includes(`lang="${locale}"`), `${page} language`);
   if (!is404) {
     assert.ok(
-      html.includes(`rel="canonical" href="${site.absolute(`${locale}/`)}"`),
+      html.includes(
+        `rel="canonical" href="${site.absolute(`${locale}/${path}`)}"`,
+      ),
       `${page} canonical`,
     );
     assert.ok(
@@ -40,9 +73,19 @@ for (const page of pages) {
     );
     for (const language of locales)
       assert.ok(
-        html.includes(`hreflang="${language}"`),
+        html.includes(
+          `hreflang="${language}" href="${site.absolute(`${language}/${path}`)}"`,
+        ),
         `${page} alternate ${language}`,
       );
+    // The default link is the copy that picks the reader's language.
+    assert.ok(
+      html.includes(`hreflang="x-default" href="${site.absolute(path)}"`),
+      `${page} alternate default`,
+    );
+    assert.ok(html.includes("data-theme-toggle"), `${page} theme control`);
+  }
+  if (kind === "home") {
     assert.ok(html.includes('id="download"'), `${page} download anchor`);
     assert.ok(
       html.includes(settings.GOOGLE_PLAY_URL),
@@ -60,7 +103,43 @@ for (const page of pages) {
       !html.includes('class="scroll-cue"'),
       `${page} scroll cue removed`,
     );
-    assert.ok(html.includes("data-theme-toggle"), `${page} theme control`);
+  }
+  if (kind === "document") {
+    const edition = documents[entry.document].locales[locale];
+    assert.ok(
+      html.includes(`<h1 id="document-title">${escape(edition.title)}</h1>`),
+      `${page} title`,
+    );
+    assert.deepEqual(
+      [...html.matchAll(/<section id="([^"]+)"/g)].map((x) => x[1]),
+      sectionIds[entry.document],
+      `${page} sections`,
+    );
+    for (const [id, { heading, paragraphs }] of Object.entries(
+      edition.sections,
+    )) {
+      assert.ok(
+        html.includes(`<h2 id="document-${id}">${escape(heading)}</h2>`),
+        `${page} heading ${id}`,
+      );
+      for (const text of paragraphs)
+        assert.ok(
+          html.includes(`<p>${escape(text)}</p>`),
+          `${page} paragraph ${id}`,
+        );
+    }
+    assert.ok(
+      html.includes(
+        `<time datetime="${documents[entry.document].date}">${edition.updated}</time>`,
+      ),
+      `${page} date`,
+    );
+    // Only the root copy redirects to the reader's language.
+    assert.equal(
+      html.includes("location.replace"),
+      entry.redirects,
+      `${page} language redirect`,
+    );
   }
   assert.ok(
     !html.includes('href=""') && !html.includes('href="#"'),
@@ -124,6 +203,12 @@ for (const locale of locales)
     sitemap.includes(`<loc>${site.absolute(`${locale}/`)}</loc>`),
     `sitemap ${locale}`,
   );
+for (const document of documentKeys)
+  for (const locale of locales)
+    assert.ok(
+      sitemap.includes(`<loc>${site.absolute(`${locale}/${document}/`)}</loc>`),
+      `sitemap ${locale} ${document}`,
+    );
 assert.ok(
   !sitemap.includes("#download") && !sitemap.includes("404"),
   "sitemap excludes fragments and errors",

@@ -1,0 +1,10 @@
+---
+import Document from "../components/Document.astro";
+import { documentKeys, type DocumentKey } from "../content/documents";
+export function getStaticPaths() {
+  return documentKeys.map((document) => ({ params: { document } }));
+}
+const document = Astro.params.document as DocumentKey;
+---
+
+<Document locale="en" document={document} autoLocale />
